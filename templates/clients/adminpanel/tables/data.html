@@ -1,0 +1,107 @@
+{% extends 'clients/adminpanel/base.html' %}
+        {% block title %}
+        <title>OnQue | Records</title>
+        {% endblock %}
+        {% block external_css %}
+        <!-- DATA TABLES -->
+        <link href="/static/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+        {% endblock %}
+        <!-- Theme style -->
+        <link href="/static/css/AdminLTE.css" rel="stylesheet" type="text/css" />
+
+
+                <!-- Content Header (Page header) -->
+                {% block content-header %}
+                <section class="content-header">
+                    <h1>
+                        Data Tables
+                        <small>advanced tables</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="/dashboard/"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active">Records</li>
+                    </ol>
+                </section>
+                {% endblock %}
+            {% block main_content %}
+                <!-- Main content -->
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            
+
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">Data Table With Full Features</h3>
+                                </div><!-- /.box-header -->
+                                <div class="box-body table-responsive">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                              <th>Mobile No</th>
+                                              <th> Date</th>
+                                              <th> Name</th>
+                                              <th> Age</th>
+                                              <th> Type </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for record in records_total %}
+                                            <tr>
+                                                <td>{{record.mobile}}</td>
+                                                <td>{{record.date}}</td>
+                                                <td>{{record.name}}</td>
+                                                <td>{{record.age}}</td>
+                                                {% if record.take_away == 1 %}
+                                                    <td>Take away</td>
+                                                {% elif record.directly_seated == 1 %}
+                                                    <td>Seated Directly</td>
+                                                {% elif record.no_show %}
+                                                    <td>No Show</td>
+                                                {% else %}
+                                                    <td>Converted</td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                              <th>Mobile No</th>
+                                              <th> Date</th>
+                                              <th> Name</th>
+                                              <th> Age</th>
+                                              <th> Type </th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div>
+                    </div>
+
+                </section><!-- /.content -->
+                {% endblock %}
+        {% block external_js %}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+        <!-- DATA TABES SCRIPT -->
+        <script src="/static/js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
+        <script src="/static/js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+        <!-- AdminLTE App -->
+        <script src="/static/js/AdminLTE/app.js" type="text/javascript"></script>
+        <!-- page script -->
+        <script type="text/javascript">
+            $(function() {
+                $("#example1").dataTable();
+                $('#example2').dataTable({
+                    "bPaginate": true,
+                    "bLengthChange": false,
+                    "bFilter": false,
+                    "bSort": true,
+                    "bInfo": true,
+                    "bAutoWidth": false
+                });
+            });
+        </script>
+        {% endblock %}
+

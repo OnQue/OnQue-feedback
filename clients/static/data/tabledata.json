@@ -1,0 +1,32 @@
+[
+{
+"number" : 1,
+"status" : 1,
+"Percentage" : "80%",
+"checked":"checked"
+},
+{
+"number" : 2,
+"status" : 0,
+"Percentage" : "70%",
+"checked":"notchecked"
+},
+{
+"number" : 3,
+"status" : 0,
+"Percentage" : "75%",
+"checked":"notchecked"
+},
+{
+"number" : 4,
+"status" : 1,
+"Percentage" : "77%",
+"checked":"checked"
+},
+{
+"number" : 5,
+"status" : 0,
+"Percentage" : "77%",
+"checked":"notchecked"
+}
+]

@@ -1,0 +1,154 @@
+{% extends 'clients/adminpanel/base.html' %}
+        {% block title %}
+        <title>OnQue | First Login</title>
+        {% endblock %}
+
+
+    
+
+            <!-- Right side column. Contains the navbar and content of the page -->
+            <aside class="right-side">
+                <!-- Content Header (Page header) -->
+                {% block content-header %}
+                <section class="content-header">
+                    <h1>
+                        General Form Elements
+                        <small>Preview</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li><a href="#">Forms</a></li>
+                        <li class="active">General Elements</li>
+                    </ol>
+                </section>
+                {% endblock %}
+
+                {% block main_content %}
+                <!-- Main content -->
+                <section class="content">
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-6">
+                            <!-- general form elements -->
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">No of tables</h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                        <form id="attributeForm" method="post" class="form-horizontal"
+                                              data-bv-message="This value is not valid"
+                                              data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+                                              data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+                                              data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+                                              <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
+                                            
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Full name</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control" name="firstName" placeholder="First name"
+                                                           data-bv-notempty="true" data-bv-notempty-message="The first name is required and cannot be empty" />
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control" name="lastName" placeholder="Last name"
+                                                           data-bv-notempty="true" data-bv-notempty-message="The last name is required and cannot be empty" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Restuarant Name</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" name="restName" placeholder="Restuarant Name"
+                                                           data-bv-notempty="true" data-bv-notempty-message="The Restuarant name is required and cannot be empty" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Email address</label>
+                                                <div class="col-sm-5">
+                                                    <input class="form-control" name="email" type="email" required
+                                                           data-bv-emailaddress="true" data-bv-emailaddress-message="The input is not a valid email address" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">No of tables in Restuarant</label>
+                                                <div class="col-sm-5">
+                                                    <input class="form-control" name="n_of_table" type="number"
+                                                           data-bv-number="true" required data-bv-number-message="The input is not a valid number"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Mobile Number</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" name="mobile" required data-bv-notempty-message="The Mobile number is required and cannot be empty"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">City</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" name="city" required data-bv-notempty-message="City is required and cannot be empty"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">New Password</label>
+                                                <div class="col-sm-5">
+                                                    <input type="password" class="form-control" name="password"
+                                                           data-bv-notempty="true" data-bv-notempty-message="The password is required and cannot be empty"
+                                                           data-bv-identical="true" data-bv-identical-field="confirmPassword" data-bv-identical-message="The password and its confirm are not the same"
+                                                           data-bv-different="true" data-bv-different-field="restName" data-bv-different-message="The password cannot be the same as Restuarant Name" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Retype password</label>
+                                                <div class="col-sm-5">
+                                                    <input type="password" class="form-control" name="confirmPassword"
+                                                           data-bv-notempty="true" data-bv-notempty-message="The confirm password is required and cannot be empty"
+                                                           data-bv-identical="true" data-bv-identical-field="password" data-bv-identical-message="The password and its confirm are not the same"
+                                                           data-bv-different="true" data-bv-different-field="restName" data-bv-different-message="The password cannot be the same as Restuarant Name" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-5 col-sm-offset-3">
+                                                    <!-- Initially, the submit button is disabled -->
+                                                    <button type="submit" class="btn btn-primary" >Submit</button>
+                                                </div>
+                                            </div>
+
+
+                                        </form>
+                            </div><!-- /.box -->
+
+
+
+
+
+                        </div><!--/.col (left) -->
+
+                    </div>   <!-- /.row -->
+                </section><!-- /.content -->
+                {% endblock %}
+           
+{% block external_js %}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+        <!-- AdminLTE App -->
+        <script src="/static/js/AdminLTE/app.js" type="text/javascript"></script>
+        <script>
+      //custom select box
+
+
+
+              $(document).ready(function() {
+            $('#attributeForm').bootstrapValidator();
+        });
+
+  </script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+{% endblock %}    
+    

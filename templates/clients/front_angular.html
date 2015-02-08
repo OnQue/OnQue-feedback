@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="utf-8">
+  <title>Onqueue</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ 
+  
+  <link rel="stylesheet" type="text/css" href="/static/style_front.css">
+  
+</head>
+<body background="/static/img/mVX4E0Q.jpg" ng-app="app" ng-controller="AppCtrl as app" >
+
+
+
+
+<nav class="navbar navbar-default" id="nav1" role="navigation" >
+            <div class="navbar-header">
+                <div style="margin:0 200px;"><strong ><h3>Parties Waited:6  Covers Seated:31</h3></strong></div>
+            </div>
+            <div>
+                <form class="navbar-form navbar-right" role="search">
+                    <button type="button" class="btn btn-primary">Help</button>
+                    <button type="button" class="btn btn-primary">Account</button>
+                </form>             
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+            <div class="col-md-7"  >
+                    <div class="form-group">
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;" ><h4>1-2</h4></div>
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;"><h4>3-4</h4></div>
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;"><h4>5+</h4></div>
+                        <img src="/static/img/watch.png" style="width:53px; background-color:grey; border-radius:2px">
+                    </div>
+                
+        <div ng-repeat="user in app.users" >
+                    <div class="row1" >
+                        <div class="row2" ><button type="button" id="btntype{{user.tablesReqd}}" class="btn btn-primary btn1" ><h4>{{user.tablesReqd}}</h4></button><img src="/static/img/bla.png" class="tableimg"></div>
+                        <div class="row3" style="padding-left:14px;">
+                            <h3 style="float:left">{{user.name}}</h3>
+                            <div class="notify">
+                                <a href="#{{user.name}}profile">
+                                <img class="user" src="/static/img/user.png">
+                                </a>
+                                <a href="#{{user.name}}feeds">
+                                <img class="phone" src="/static/img/phone.png">
+                                </a>
+                                <a href="#{{user.name}}seated">
+                                <img class="seated" src="/static/img/seated.png">
+                                </a>
+                                <a href="">
+                                <img class="noshow" src="/static/img/noshow.png">
+                                </a>
+                            </div>
+                            <div class="pull-left location">booth</div>
+                            <div class="pull-right message">waiting 14 mins</div>
+                        </div>
+                    </div>
+                <!-- userStatus ends here -->
+
+                <!-- userModal begins here -->
+
+                <div id="{{user.name}}profile" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Name</td><td>{{user.name}}</td>
+                            </tr>
+                                <td>Mobile</td><td>{{user.mobile}}</td>
+                            <tr>
+                                <td>Age</td><td>{{user.age}}</td>
+                            </tr>
+                            <tr>    
+                                <td>Last Visited</td><td>{{user.lastVisited}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- userModal ends here -->
+
+                <!-- userFeedsModal begins here -->
+
+                <div id="{{user.name}}feeds" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <form class="form" role="form">
+                            <div class="form-group" style="width:100%">
+                            <input type="text" class="form-control " id="name" value="{{user.mobile}}" >
+                            <br><br>
+                            </div>
+                        
+                    
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3"   id="message" placeholder="Enter your Message here...">Your table is ready. Please contact the host".</textarea>
+                            </div>
+                            
+                            <div class="form-group" style="width:100%; clear:both">
+                            <button type="button" class="btn btn-primary" id="sendBtn">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- userFeedsModal ends here -->
+
+                <!-- userSeatedModal starts here -->
+
+                <div id="{{user.name}}seated" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <form>
+                            <div class="bookingdiv">
+                            <div  ng-repeat="table in app.tables|filter:{status:0}" class="form-group" ng-model="app.table.number">
+                                <input class="table{{table.status}}" id="{{table.number}}" type="radio" name="table" value="check1" ng.model="app.table.number">  
+                                <label for="{{table.number}}">{{table.number}}</label>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <button class="btn btn-primary" ng-click="app.addTable(app.table)">
+                                Seat
+                            </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- userSeatedModal ends here -->
+
+    </div>
+            
+        </div>
+
+    <div class="col-md-5" >
+          <form class="form" role="form" name="tableForm" >
+            <div class="form-group" style="width:100%">
+                <select class="form-control" style="width:40% ;float:left;" ng-model="app.table.number" ng-options="table.number for table in app.tables|filter:{status:1}">
+                    <option value="">-- Choose table --</option>
+                </select>
+              <button class="btn btn-primary" ng-click="removeTable(app.table)">Checkout</button>
+            </div>
+          </form >
+          <div>
+            <form class="form" role="form" name="userForm">
+            <div class="form-group" style="width:100%">
+              <input type="text" class="form-control " id="name" placeholder="Customer's Name" ng-model="app.user.name" required>
+              <select class="form-control" id="param1" ng-model="app.user.partySize" required> <option value="one">One</option></select>
+            </div>
+            <br><br>
+            <div class="form-group">
+              <input type="text" class="form-control " id="phoneNo" placeholder="Customer's Mobile(10 digits)" ng-model="user.phoneNo" required>
+            </div>
+            <div class="form-group">
+              <div class="keypad">
+                <div class="numpad1"><span class="nums">1</span></div>
+                <div class="numpad2"><span class="nums">3</span></div>
+                <div class="numpad3"><span class="nums">2</span></div>
+                <div class="numpad1"><span class="nums">4</span></div>
+                <div class="numpad2"><span class="nums">6</span></div>
+                <div class="numpad3"><span class="nums">5</span></div>
+                <div class="numpad1"><span class="nums">7</span></div>
+                <div class="numpad2"><span class="nums">9</span></div>
+                <div class="numpad3"><span class="nums">8</span></div>
+                <div class="numpad1"><span class="nums">*</span></div>
+                <div class="numpad2"><span class="nums">#</span></div>
+                <div class="numpad3"><span class="nums">0</span></div>
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <textarea class="form-control" rows="3"   id="param3" placeholder="Enter notes here" ng-model="app.user.notes" required></textarea>
+            
+              <label for="quotes"  style="color:#fff;">&nbspQuotes</label>
+              <select class="form-control"  id="param4" ng-model="app.user.quote" required> <option value="one">One</option></select>
+            </div>
+          
+
+            <div class="form-group" style="width:100%; clear:both">
+              <br>
+              <button type="button" class="btn btn-primary" id="cancelBtn" ng-click="app.addUser(app.user)">Waiting</button>
+              <button type="button" class="btn" id="addBtn" ng-click="myForm.submitTheForm2()">Seat</button>
+              <button type="button" class="btn btn-primary" id="sendBtn" ng-click="myForm.submitTheForm2()">Take Away</button>
+            </div>
+             <!-- <div>
+    {{myForm.name}}
+  </div>
+  <div>
+    {{myForm.phoneNo}}
+  </div>
+  <div>
+    {{myForm.partySize}}
+  </div>
+  <div>
+    {{myForm.notes}}
+  </div>
+  <div>
+    {{myForm.quote}}
+  </div> -->
+          </form>
+          </div>
+          </div>
+    </div>
+    </div>
+
+
+</body>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+  <script type="text/javascript" src="/static/js/function.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/style_front.css">
+<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+ <script type="text/javascript">
+$("#sendsms").submit(function() {
+
+    var url = "/sendsms/"; // the script where you handle the form input.
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#idForm").serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+               alert(data); // show response from the php script.
+           }
+         });
+
+    return false; // avoid to execute the actual submit of the form.
+});
+
+ </script>
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</body>
+</html>

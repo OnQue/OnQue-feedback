@@ -1,0 +1,149 @@
+<div class="col-lg-3 ds">
+                    <!--COMPLETED ACTIONS DONUTS CHART-->
+						<h3>Free Tables</h3>
+                                        
+                      <!-- First Action -->
+                      {% for i in status.free %}
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                      	</div>
+                      	<div class="details">
+                      		<!-- <p><muted>2 Minutes Ago</muted><br/> -->
+                      		   <a href="#">{{i}}</a><br/>
+                      		</p>
+                      	</div>
+                      </div>
+                      {% endfor %}
+            <h3>Booked Tables</h3>
+
+
+                      {% if status.booked %}
+                          {% for i in status.booked %}
+                      <div class="desc">
+                        <div class="thumb">
+                          <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                        </div>
+                        <div class="details">
+                          <!-- <p><muted>2 Minutes Ago</muted><br/> -->
+                             <a href="#">{{i}}</a><br/>
+                          </p>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+                      {% endif %}
+                      <div class="desc">
+                      </div>
+
+            <h3>Seated Guests</h3>
+                                        
+                      <!-- First Action -->
+                      {% for i in seated %}
+                      <div class="desc">
+                        <div class="thumb">
+                          <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                        </div>
+                        <div class="details">
+                          <!-- <p><muted>2 Minutes Ago</muted><br/> -->
+                             <a href="#">{{i}}</a><br/>
+                          </p>
+                        </div>
+                      </div>
+                      {% endfor %}
+                      <div class="desc">
+                      </div>
+
+            <h3>Guests in Waiting List</h3>
+                                        
+                      <!-- First Action -->
+                      {% for i in waiting %}
+                      <div class="desc">
+                        <div class="thumb">
+                          <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                        </div>
+                        <div class="details">
+                          <!-- <p><muted>2 Minutes Ago</muted><br/> -->
+                             <a href="#">{{i}}</a><br/>
+                          </p>
+                        </div>
+                      </div>
+                      {% endfor %}
+                      <div class="desc">
+                      </div>
+
+                      
+
+                       <!-- USERS ONLINE SECTION -->
+						<h3>TEAM MEMBERS</h3>
+                      <!-- First Member -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<img class="img-circle" src="/static/img/ui-divya.jpg" width="35px" height="35px" align="">
+                      	</div>
+                      	<div class="details">
+                      		<p><a href="#">DIVYA MANIAN</a><br/>
+                      		   <muted>Available</muted>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Second Member -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<img class="img-circle" src="/static/img/ui-sherman.jpg" width="35px" height="35px" align="">
+                      	</div>
+                      	<div class="details">
+                      		<p><a href="#">DJ SHERMAN</a><br/>
+                      		   <muted>I am Busy</muted>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Third Member -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<img class="img-circle" src="/static/img/ui-danro.jpg" width="35px" height="35px" align="">
+                      	</div>
+                      	<div class="details">
+                      		<p><a href="#">DAN ROGERS</a><br/>
+                      		   <muted>Available</muted>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Fourth Member -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<img class="img-circle" src="/static/img/ui-zac.jpg" width="35px" height="35px" align="">
+                      	</div>
+                      	<div class="details">
+                      		<p><a href="#">Zac Sniders</a><br/>
+                      		   <muted>Available</muted>
+                      		</p>
+                      	</div>
+                      </div>
+                      <!-- Fifth Member -->
+                      <div class="desc">
+                      	<div class="thumb">
+                      		<img class="img-circle" src="/static/img/ui-sam.jpg" width="35px" height="35px" align="">
+                      	</div>
+                      	<div class="details">
+                      		<p><a href="#">Marcel Newman</a><br/>
+                      		   <muted>Available</muted>
+                      		</p>
+                      	</div>
+                      </div>
+
+                        <!-- CALENDAR-->
+                        <div id="calendar" class="mb">
+                            <div class="panel green-panel no-margin">
+                                <div class="panel-body">
+                                    <div id="date-popover" class="popover top" style="cursor: pointer; disadding: block; margin-left: 33%; margin-top: -50px; width: 175px;">
+                                        <div class="arrow"></div>
+                                        <h3 class="popover-title" style="disadding: none;"></h3>
+                                        <div id="date-popover-content" class="popover-content"></div>
+                                    </div>
+                                    <div id="my-calendar"></div>
+                                </div>
+                            </div>
+                        </div><!-- / calendar -->
+                      
+                  </div><!-- /col-lg-3 -->

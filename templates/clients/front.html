@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="utf-8">
+  <title>OnQue</title>
+  <link href="/static/img/use_as_ico.png" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  var error = location.search.split('error=')[1]
+  console.log(error);
+  if(error){
+    error=error.replace(/%20/g,' ');
+  alert(error);
+}
+</script>
+
+ 
+  
+  <link rel="stylesheet" type="text/css" href="/static/style_front.css">
+  
+</head>
+<body background="/static/img/mVX4E0Q.jpg" ng-app="app" ng-controller="AppCtrl as app" >
+
+
+
+
+<nav class="navbar navbar-default" id="nav1" role="navigation" >
+            <div class="navbar-header">
+                <div style="margin:0 200px;"><strong ><h3>Parties Waiting:{{parties_waiting}}  Covers Seated:{{parties_seated}}</h3></strong></div>
+            </div>
+            <div>
+                <form class="navbar-form navbar-right" role="search">
+                    <button type="button" class="btn btn-primary">Help</button>
+                    <a href ="/dashboard/"><button type="button" class="btn btn-primary">Dashboad</button></a>
+                </form>             
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+            <div class="col-md-7"  >
+<!--                     <div class="form-group">
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;" ><h4>1-2</h4></div>
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;"><h4>3-4</h4></div>
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;"><h4>5+</h4></div>
+                        <img src="/static/img/watch.png" style="width:53px; background-color:grey; border-radius:2px">
+                    </div> -->
+                
+                    <div class="row1" >
+                    {% for user in users %}
+                        <div class="row2" ><button type="button" id="btntype{{user.tablesReqd}}" class="btn btn-primary btn1" ><h4>{{user.tablesReqd}}</h4></button><img src="/static/img/bla.png" class="tableimg"></div>
+                        <div class="row3" id="guestInWaiting" style="padding-left:14px;">
+                            <h3 style="float:left">{{user.name}}   {{user.mobile}}</h3>
+                            <div class="notify">
+                                <a href="#{{user.name}}profile">
+                                <img class="user" src="/static/img/user.png">
+                                </a>
+                                <a href="#{{user.name}}feeds">
+                                <img class="phone" src="/static/img/phone.png">
+                                </a>
+                                <a href="#{{user.name}}seated">
+                                <img class="seated" src="/static/img/seated.png">
+                                </a>
+                                <a href="#">
+                                <img id="{{user.mobile}}"  class="noshow" src="/static/img/noshow.png">
+                                </a>
+                            </div>
+                            <div class="pull-left location">Quoted time: {{user.waiting_time}} mins</div>
+                            <div class="pull-right message">Time left:{{user.time_left}} mins</div>
+                        </div>
+                     
+
+
+                <!-- userStatus ends here -->
+
+                <!-- userModal begins here -->
+                <div id="{{user.name}}profile" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Name</td><td>{{user.name}}</td>
+                            </tr>
+                                <td>Mobile</td><td>{{user.mobile}}</td>
+                            <tr>
+                                <td>Age</td><td>{{user.age}}</td>
+                            </tr>
+                            <tr>    
+                                <td>Last Visited</td><td>{{user.lastVisited.restuarant}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- userModal ends here -->
+
+                <!-- userFeedsModal begins here -->
+
+                <div id="{{user.name}}feeds" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <form class="form" role="form" id="sendsms" method = "post" action="/notifyGuest/">
+                            <div class="form-group" style="width:100%">
+                                <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
+                            <input type="text" class="form-control " id="name" name="number" value="{{user.mobile}}" >
+                            <br><br>
+                            </div>
+                        
+                    
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" name="message"  id="message" placeholder="Enter your Message here...">Thank you for waiting your table at {{client.rest_name}} is ready. Please report back to the host.</textarea>
+                            </div>
+                            
+                            <div class="form-group" style="width:100%; clear:both">
+                            <input type="submit" name="sendsmsfeed" class="btn btn-primary" id="sendBtn" value="Notify" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- userFeedsModal ends here -->
+
+                <!-- userSeatedModal starts here -->
+
+                <div id="{{user.name}}seated" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <form action="/seatUser/" method="post">
+                        <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
+                        <input type="hidden" class="form-control " name="mobile" id="name" value="{{user.mobile}}" >
+
+                            <div class="bookingdiv">
+                            <div   class="form-group" ng-model="app.table.number">
+                            {% for table in free_tables %}
+                                <input class="table1" id="{{table}}" type="checkbox" name="table{{table}}" value="{{table}}" ng.model="app.table.number">  
+                                <label for="{{table}}">{{table}}</label>
+                            {% endfor %}
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <button class="btn btn-primary" ng-click="app.addTable(app.table)">
+                                Seat
+                            </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- userSeatedModal ends here -->
+
+
+    </div>
+            
+        </div>
+
+    <div class="col-md-5" >
+          <form class="form" role="form" name="tableForm" action = "/checkout/" method="post" >
+          <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
+            <div class="form-group" style="width:100%">
+                <select name="checkout_table" class="form-control" style="width:40% ;float:left;" ng-model="app.table.number" ng-options="table.number for table in app.tables|filter:{status:1}">
+                    <option value="">-- Choose table --</option>
+                    {% for table in checkout_table_nums %}
+                    <option value="{{table}}">{{table}}</option>
+                    {% endfor %}
+                </select>
+              <button class="btn btn-primary" ng-click="removeTable(app.table)">Checkout</button>
+            </div>
+          </form >
+    <div>
+      <div id="step1">
+            <form class="form" role="form" name="userForm" method="post" action="/adduser/">
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
+            <div class="form-group" style="width:100%">
+              <input type="text" class="form-control " name="name" id="name" placeholder="Customer's Name" ng-model="app.user.name" required/>
+              </div>
+              <select class="form-control" id="param1" name="partysize" ng-model="app.user.partySize" required> 
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">Four</option>
+                <option value="5">Five</option>
+              </select>
+            </div>
+            <br><br>
+            <div class="form-group">
+              <input type="text" class="form-control " id="phoneNo" name="mobile" placeholder="Customer's Mobile(10 digits)" ng-model="user.phoneNo" required>
+            </div>
+            <div class="form-group">
+              <div class="keypad">
+                <div class="numpad1 keys"  id="1"><span class="nums">1</span></div>
+                <div class="numpad2 keys"  id="3"><span class="nums">3</span></div>
+                <div class="numpad3 keys"  id="2"><span class="nums">2</span></div>
+                <div class="numpad1 keys"  id="4"><span class="nums">4</span></div>
+                <div class="numpad2 keys"  id="6"><span class="nums">6</span></div>
+                <div class="numpad3 keys"  id="5"><span class="nums">5</span></div>
+                <div class="numpad1 keys"  id="7"><span class="nums">7</span></div>
+                <div class="numpad2 keys"  id="9"><span class="nums">9</span></div>
+                <div class="numpad3 keys"  id="8"><span class="nums">8</span></div>
+                <div class="numpad1 keys"  id="r"><span class="nums">R</span></div>
+                <div class="numpad2 keys"  id="c"><span class="nums">C</span></div>
+                <div class="numpad3 keys"  id="0"><span class="nums">0</span></div>
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <textarea class="form-control" rows="3" name="notes"  id="param3" placeholder="Enter notes here" ng-model="app.user.notes"></textarea>
+            
+              <label for="quotes"  style="color:#fff;">&nbspQuotes</label>
+              <select class="form-control"  id="param4" name="waitingtime" ng-model="app.user.quote" required> 
+                <option value="5">5 mins</option>
+                <option value="10">10 mins</option>
+                <option value="15">15 mins</option>
+                <option value="30">30 mins</option>
+              </select>
+            </div>
+          
+
+            <div class="form-group" style="width:100%; clear:both">
+              <br>
+              {% if free_tables %}
+               <div style="float:center"  class="form-group" ng-model="app.table.number">
+                {% for table in free_tables %}
+                    <input class="table1" id="{{table}}" type="checkbox" name="table{{table}}" value="{{table}}" ng.model="app.table.number">  
+                    <label style="color:#fff;" for="{{table}}">{{table}}</label>
+                {% endfor %}
+              </div>
+                <input type="submit" name="seat" class="btn" id="addBtn" value="Seat">
+              {% endif %}
+                <input type="submit" name="add_to_waiting"  class="btn btn-primary" id="cancelBtn" Value="Waiting"/>
+
+              <input type="submit" name="takeaway" class="btn btn-primary" id="sendBtn" value="Take away" />
+            </div>
+          </form>
+        </div> <!-- closing step1 div -->
+          </div>
+          </div>
+    </div>
+    </div>
+
+
+</body>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+  
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/style_front.css">
+<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/bootbox.min.js"></script>
+<script>
+        $(document).on("click", ".noshow", function(e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+        bootbox.confirm("Are you sure you want to remove "+id+" from waiting list?", function(result) {
+
+            if (result) {
+                console.log(id);
+                document.body.innerHTML += '<form id="dynForm" action="/noShow/" method="post"><input type="hidden" name="mobile" value="'+id+'"> <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"" /></form>';
+                    document.getElementById("dynForm").submit();
+               // What to do here?
+            } else {
+                console.log("False")
+               // What to do here?
+            }               
+        });
+
+        });
+
+        $( ".keys" )
+  .click(function() {
+    var value = $( this ).attr("id");
+   var value2 = $( "#phoneNo" ).val();
+   if(value=='c'){
+    console.log(typeof(value2));
+    var str=value2
+    str= str.substring(0, str.length - 1);
+    $( "#phoneNo" ).val(str);
+   }
+   else if(value=='r'){
+    $( "#phoneNo" ).val('');
+   }
+   else{
+    $( "#phoneNo" ).val(value2+value);
+}
+  })
+    </script>
+ 
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</body>
+</html>

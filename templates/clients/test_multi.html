@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="utf-8">
+  <title>Onque</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  var error = location.search.split('error=')[1]
+  console.log(error);
+  if(error){
+  alert(error);
+}
+</script>
+ 
+  
+  <link rel="stylesheet" type="text/css" href="/static/style_front.css">
+  
+</head>
+<body background="/static/img/mVX4E0Q.jpg" ng-app="app" ng-controller="AppCtrl as app" >
+
+
+
+
+<nav class="navbar navbar-default" id="nav1" role="navigation" >
+            <div class="navbar-header">
+                <div style="margin:0 200px;"><strong ><h3>Parties Waited:6  Covers Seated:31</h3></strong></div>
+            </div>
+            <div>
+                <form class="navbar-form navbar-right" role="search">
+                    <button type="button" class="btn btn-primary">Help</button>
+                    <a href ="/dashboard/"><button type="button" class="btn btn-primary">Dashboad</button></a>
+                </form>             
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+            <div class="col-md-7"  >
+                    <div class="form-group">
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;" ><h4>1-2</h4></div>
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;"><h4>3-4</h4></div>
+                        <div type="button" class="btn btn-primary" style="width:52px; background-color:grey;"><h4>5+</h4></div>
+                        <img src="/static/img/watch.png" style="width:53px; background-color:grey; border-radius:2px">
+                    </div>
+                
+                    <div class="row1" >
+                    {% for user in users %}
+                        <div class="row2" ><button type="button" id="btntype{{user.tablesReqd}}" class="btn btn-primary btn1" ><h4>{{user.tablesReqd}}</h4></button><img src="/static/img/bla.png" class="tableimg"></div>
+                        <div class="row3" style="padding-left:14px;">
+                            <h3 style="float:left">{{user.name}}   {{user.mobile}}</h3>
+                            <div class="notify">
+                                <a href="#{{user.name}}profile">
+                                <img class="user" src="/static/img/user.png">
+                                </a>
+                                <a href="#{{user.name}}feeds">
+                                <img class="phone" src="/static/img//phone.png">
+                                </a>
+                                <a href="#{{user.name}}seated">
+                                <img class="seated" src="/static/img//seated.png">
+                                </a>
+                                <a href="">
+                                <img class="noshow" src="/static/img//noshow.png">
+                                </a>
+                            </div>
+                            <div class="pull-left location">booth</div>
+                            <div class="pull-right message">waiting 14 mins</div>
+                        </div>
+                     
+
+
+                <!-- userStatus ends here -->
+
+                <!-- userModal begins here -->
+                <div id="{{user.name}}profile" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Name</td><td>{{user.name}}</td>
+                            </tr>
+                                <td>Mobile</td><td>{{user.mobile}}</td>
+                            <tr>
+                                <td>Age</td><td>{{user.age}}</td>
+                            </tr>
+                            <tr>    
+                                <td>Last Visited</td><td>{{user.lastVisited}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- userModal ends here -->
+
+                <!-- userFeedsModal begins here -->
+
+                <div id="{{user.name}}feeds" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <form class="form" role="form" id="sendsms" method = "post">
+                            <div class="form-group" style="width:100%">
+                            <input type="text" class="form-control " id="name" value="{{user.mobile}}" >
+                            <br><br>
+                            </div>
+                        
+                    
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3"   id="message" placeholder="Enter your Message here...">Your table is ready. Please contact the host".</textarea>
+                            </div>
+                            
+                            <div class="form-group" style="width:100%; clear:both">
+                            <button type="button" class="btn btn-primary" id="sendBtn">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- userFeedsModal ends here -->
+
+                <!-- userSeatedModal starts here -->
+
+                <div id="{{user.name}}seated" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <form action="/seatUser/" method="post">
+                        <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
+                        <input type="hidden" class="form-control " name="mobile" id="name" value="{{user.mobile}}" >
+
+                            <div class="bookingdiv">
+                            <div   class="form-group" ng-model="app.table.number">
+                            {% for table in free_tables %}
+                                <input class="table1" id="{{table}}" type="checkbox" name="table{{table}}" value="{{table}}" ng.model="app.table.number">  
+                                <label for="{{table}}">{{table}}</label>
+                            {% endfor %}
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <button class="btn btn-primary" ng-click="app.addTable(app.table)">
+                                Seat
+                            </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- userSeatedModal ends here -->
+                <!-- Seat directly model starts here -->
+                <div id="step2" class="modalDialog">
+                    <div>
+                        <a href="#close" title="Close" class="close">X</a>
+                        <form action="/seatUserDirectly/" method="post">
+                        <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' />
+                        <input type="hidden" class="form-control " name="mobile" id="name" value="{{user.mobile}}" >
+
+                            <div class="bookingdiv">
+                            <div   class="form-group" ng-model="app.table.number">
+                            {% for table in free_tables %}
+                                <input class="table1" id="{{table}}" type="checkbox" name="table{{table}}" value="{{table}}" ng.model="app.table.number">  
+                                <label for="{{table}}">{{table}}</label>
+                            {% endfor %}
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <button class="btn btn-primary" ng-click="app.addTable(app.table)">
+                                Seat
+                            </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Seat directly model starts here -->
+
+    </div>
+            
+        </div>
+
+
+        <form>
+<article id="part1">
+<input type"text" name="input1" id="input1">
+<input type"text" name="input1" id="input2">
+<input type"text" name="input1" id="input3">
+<input class="next button" type="button"  value="Next">
+</article>
+
+<article id="part2">
+<input type"radio" name="radio" id="input4">
+<input type"radio" name="radio" id="input5">
+<input class="next button" type="button"  value="Next">
+</article>
+
+<article id="part3">
+<div id="results"></div>
+<input name="Submit" type="submit" class="next button submitLast"  value="Order">
+</article>
+</form>
+          
+
+          
+
+
+        
+          </div>
+          </div>
+    </div>
+    </div>
+
+
+</body>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular.min.js"></script>
+  
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/style_front.css">
+<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+function showValues () {
+var line1 = $("#input1").val()
+var line2 = $("#input2").val()+" x "+$("input3").val()
+var option1 = $("#input4").is(":checked")
+var option2 = $("#input5").is(":checked")
+if (option1==true) {
+var type = "option1"
+}
+if (option2==true) {
+var type = "option2"
+}
+$("results").append(line1+"<br>"+line2+"<br>"+type);
+
+}
+
+</script>
+ 
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</body>
+</html>

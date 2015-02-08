@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+
+
+function loadStatus() {
+    var req = new XMLHttpRequest();
+    req.onload = function(e) {
+        var raw_data = JSON.parse(req.response);
+        console.log(raw_data);
+        // var alerts = raw_data['booked'];
+        console.log(typeof(raw_data));   
+        // for (i in raw_data){
+        //     console.log(raw_data[i]+i,typeof(i));
+        // }
+        booked = raw_data['booked']
+        free = raw_data['free']
+        b = document.getElementById('booked');
+        f = document.getElementById('free');
+        $('#booked').append("<p>"+ "Booked tables are: "+booked+"</p>");
+        $('#free').append("<p>"+ "Free tables are: "+free+"</p>");
+        
+        
+
+     
+        // var tbl = "";
+        // // insert revisions into lower table
+        // for (var alert in alerts) {
+        //     if (alerts[alert]["mergedfrom"] != originalkeyrev) {
+        //         continue;
+        //     }
+        //     tbl = document.getElementById(originalkeyrev + "-tbl");
+        //     addAlertToUI(tbl, alerts[alert], showall, originalkeyrev);
+        // }
+        // var mergedfromhtml = "<span id=\"mergedfrom-" + originalkeyrev + "\" onclick=\"hideMerged('" + originalkeyrev + "', " + showall + ");\">hide merged alerts</span>";
+        // $("#" + originalkeyrev + "-hdr").html("<h3>" + originalkeyrev + "</h3>" + mergedfromhtml);
+    }
+    req.open('get', '/api/',true);
+    req.send();
+}
+
+
+
+
+loadStatus();
+
+    </script>
+</head>
+<body class="noscript">
+    Current Status is
+<div id="booked">
+</div>
+<div id="free">
+</div>
+
+
+
+</body>
+</html>
