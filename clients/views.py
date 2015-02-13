@@ -25,6 +25,21 @@ _MSG_CODES = {'swg': 'Sorry Wrong credentials',
 			  'rsl': 'Registered Successfully Please Log in now',
 			  'lap': 'Please login to access that page'}
 
+MONTH = {
+	'January':'01',
+	'February':'02',
+	'March':'03',
+	'April':'04',
+	'May':'05',
+	'June':'06',
+	'July':'07',
+	'August':'08',
+	'September':'09',
+	'October':'10',
+	'Novemebr':'11',
+	'December':'12'
+}
+
 
 @receiver([post_save], sender=User)
 def init_newuser_data(sender, **kwargs):
@@ -826,19 +841,32 @@ def feedback_service(request):
 		rating_ab = int(request.POST.get('rating_ab',''))
 		rating_oe = int(request.POST.get('rating_oe',''))
 		info_name = request.POST.get('info_name','')
-		dob = request.POST.get('dob','')
-		anniversary = request.POST.get('anniversary','')
+		dob_date = request.POST.get('dob_date','')
+		dob_month = request.POST.get('dob_month','')
+		dob_year = request.POST.get('dob_year','')
+		ann_date = request.POST.get('ann_date','')
+		ann_month = request.POST.get('ann_month','')
+		ann_year = request.POST.get('ann_year','')
 		info_contact = request.POST.get('info_contact','')
 		comments = request.POST.get('comments','')
-		if utils.guest_exists(info_contact):
-			pass
-		else:
-			g = Guest(name=info_name,mobile=info_contact,dob=datetime.datetime.strptime(dob,"%d/%m/%Y"),created_at=utils.time_now())
-			g.save()
-		print rating_qof,rating_qos,rating_sf,rating_ab, rating_oe,table_num, info_name, dob, anniversary,info_contact,comments
-		fs = FeedbackService(user=request.user, date=utils.time_now(),mobile=info_contact,name=info_name,table_num=table_num,food=rating_qof,service=rating_qos,staff_friend=rating_sf,ambience=rating_ab,overall_exp=rating_oe,dob=dob,anniversary=anniversary,comments=comments)
-		fs.save()
-		print "SAVED"
+		dob = dob_date + "/" + MONTH[dob_month] + "/" + dob_year
+		anniversary = ann_date + "/" + MONTH[ann_month] + "/" + ann_year
+		if (info_contact and info_name):
+			try:
+				if utils.guest_exists(info_contact):
+					pass
+				else:
+					g = Guest(name=info_name,mobile=info_contact,dob=datetime.datetime.strptime(dob,"%d/%m/%Y"),created_at=utils.time_now())
+					g.save()
+				print rating_qof,rating_qos,rating_sf,rating_ab, rating_oe,table_num, info_name, dob,info_contact,comments, anniversary
+				fs = FeedbackService(user=request.user, date=utils.time_now(),mobile=info_contact,name=info_name,table_num=table_num,food=rating_qof,service=rating_qos,staff_friend=rating_sf,ambience=rating_ab,overall_exp=rating_oe,dob=dob,anniversary=anniversary,comments=comments)
+				fs.save()
+				print "SAVED"
+			except:
+				return HttpResponseRedirect('/feedback?msg=Invalid Input')
+
+			return HttpResponseRedirect('/feedback?msg=thanks')
+		return HttpResponseRedirect('/feedback?msg=required')
 	client = utils.user_to_client(request.user)
 	return render(request, 'clients/feedback_service.html',{'client':client})
 
