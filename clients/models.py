@@ -71,10 +71,28 @@ class FeedbackService(models.Model):
     staff_friend = models.IntegerField(blank=True,null=True)
     name = models.CharField(null=True,blank=True,max_length=32)
     dob = models.CharField(blank=True,max_length=10, null=True)
-    anniversary = models.CharField(blank=True,max_length=10, null=True)
     comments = models.CharField(blank=True,max_length=200, null=True)
-    recieve_info = models.BooleanField(default=True)
     table_num = models.CharField(default='0',max_length =32)
+
+class Questions(models.Model):
+    user = models.ForeignKey(User)
+    question_type = models.IntegerField(blank=False,null=True) #1 for text 2 for date
+    question_text = models.CharField(blank=False,max_length=1024,null=True)
+    show = models.IntegerField(blank=False,default=1,null=True)
+
+class Answers(models.Model):
+    user = models.ForeignKey(User)
+    question = models.ForeignKey(Questions)
+    answer = models.CharField(blank=True,null=True,max_length=1024)
+
+class RatingTexts(models.Model):
+    user = models.ForeignKey(User)
+    service_text = models.CharField(default='Quality of Service',blank=False,null=True,max_length=64)
+    ambience_text = models.CharField(default='Ambience',blank=False,null=True,max_length=64)
+    food_text = models.CharField(default='Quality of Food',blank=False,null=True,max_length=64)
+    overall_exp_text = models.CharField(default='Overall Experience',blank=False,null=True,max_length=64)
+    staff_friend_text = models.CharField(default='Staff Friendliness',blank=False,null=True,max_length=64)
+
 
 
 

@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from clients.forms import MyForm, AdminSettingsForm, AddGuestForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from clients.models import table, Record, Feedback, FeedbackService
+from clients.models import table, Record, Feedback, FeedbackService, RatingTexts, Questions, Answers
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import json
@@ -54,6 +54,7 @@ def init_newuser_data(sender, **kwargs):
             defaults={'user':user,'username':user.username,'rest_name':rest_name,'n_of_table':10,'status':{'free':[1,2,3,4,5,6,7,8,9,10],'booked':[]}})
 	except table.MultipleObjectsReturned:
 		pass
+
 
 def index(request):
 	return render(request,'index.html')
@@ -811,6 +812,7 @@ def handler404(request):
 
 def feedback_display(request):
 	feedbacks = FeedbackService.objects.filter(user=request.user).exclude(service__isnull=True)
+	answers = Answers.objects.filter(user=request.user)
 	client = utils.user_to_client(request.user)
 	return render(request,'clients/adminpanel/tables/feedback_display.html',{'feedbacks':feedbacks,'client':client})
 
@@ -844,13 +846,10 @@ def feedback_service(request):
 		dob_date = request.POST.get('dob_date','')
 		dob_month = request.POST.get('dob_month','')
 		dob_year = request.POST.get('dob_year','')
-		ann_date = request.POST.get('ann_date','')
-		ann_month = request.POST.get('ann_month','')
-		ann_year = request.POST.get('ann_year','')
 		info_contact = request.POST.get('info_contact','')
 		comments = request.POST.get('comments','')
 		dob = dob_date + "/" + MONTH[dob_month] + "/" + dob_year
-		anniversary = ann_date + "/" + MONTH[ann_month] + "/" + ann_year
+		print "lmalfmalfmlamf"
 		if (info_contact and info_name):
 			try:
 				if utils.guest_exists(info_contact):
@@ -858,9 +857,17 @@ def feedback_service(request):
 				else:
 					g = Guest(name=info_name,mobile=info_contact,dob=datetime.datetime.strptime(dob,"%d/%m/%Y"),created_at=utils.time_now())
 					g.save()
-				print rating_qof,rating_qos,rating_sf,rating_ab, rating_oe,table_num, info_name, dob,info_contact,comments, anniversary
-				fs = FeedbackService(user=request.user, date=utils.time_now(),mobile=info_contact,name=info_name,table_num=table_num,food=rating_qof,service=rating_qos,staff_friend=rating_sf,ambience=rating_ab,overall_exp=rating_oe,dob=dob,anniversary=anniversary,comments=comments)
+				print rating_qof,rating_qos,rating_sf,rating_ab, rating_oe,table_num, info_name, dob,info_contact,comments
+				fs = FeedbackService(user=request.user, date=utils.time_now(),mobile=info_contact,name=info_name,table_num=table_num,food=rating_qof,service=rating_qos,staff_friend=rating_sf,ambience=rating_ab,overall_exp=rating_oe,dob=dob,comments=comments)
 				fs.save()
+				print "HHAHAHAHAHAH"
+				questions = Questions.objects.filter(user=request.user).exclude(show=0)
+				for q in questions:
+					print q
+					answer = request.POST.get('question_%d' %q.id, '')
+					a = Answers.objects.create(user=request.user, question=q, answer=answer)
+
+
 				print "SAVED"
 			except:
 				return HttpResponseRedirect('/feedback?msg=Invalid Input')
@@ -868,7 +875,68 @@ def feedback_service(request):
 			return HttpResponseRedirect('/feedback?msg=thanks')
 		return HttpResponseRedirect('/feedback?msg=required')
 	client = utils.user_to_client(request.user)
-	return render(request, 'clients/feedback_service.html',{'client':client})
+	try:
+		rating_texts = RatingTexts.objects.get(user=request.user)
+	except RatingTexts.DoesNotExist:
+		rating_texts = RatingTexts.objects.create(user=request.user)
+
+	questions = Questions.objects.filter(user=request.user).exclude(show=0)
+	return render(request, 'clients/feedback_service.html',{'client':client,'rating_texts':rating_texts,'questions':questions})
+
+def feedbackManager(request):
+	rating_texts = RatingTexts.objects.get(user=request.user)
+	client = utils.user_to_client(request.user)
+	questions = Questions.objects.filter(user=request.user)
+	return render(request, 'clients/feedbackManager.html',{'rating_texts':rating_texts,'client':client,'questions':questions})
+
+def change_rating_texts(request):
+	if request.method == 'POST':
+		rating_texts = RatingTexts.objects.get(user=request.user)
+		food = request.POST.get('food_text',rating_texts.food_text) or rating_texts.food_text
+		service = request.POST.get('service_text',rating_texts.service_text) or rating_texts.service_text
+		staff_friend = request.POST.get('staff_friend_text',rating_texts.staff_friend_text) or rating_texts.staff_friend_text
+		ambience = request.POST.get('ambience_text',rating_texts.ambience_text) or rating_texts.ambience_text
+		overall_exp = request.POST.get('overall_exp_text',rating_texts.overall_exp_text) or rating_texts.overall_exp_text
+		
+		rating_texts.food_text = food
+		rating_texts.service_text = service
+		rating_texts.staff_friend_text = staff_friend
+		rating_texts.ambience_text = ambience
+		rating_texts.overall_exp_text = overall_exp
+
+		rating_texts.save()
+
+	return HttpResponseRedirect('/feedbackManager/')
+
+def create_questions(request):
+	if request.method == 'POST':
+		type_answer = int(request.POST.get('type',''))
+		questionText = request.POST.get('question_text','')
+		print type_answer,questionText
+		q = Questions.objects.create(question_type=type_answer,question_text=questionText,user=request.user,show=1)
+		print "DONE"
+
+
+	return HttpResponseRedirect('/feedbackManager/')
+
+def questions_to_show(request):
+	if request.method == 'POST':
+		q = Questions.objects.filter(user=request.user)
+
+		for question in q:
+			value = request.POST.get('question_%d' %question.id,'')
+			print value,"//////"
+			if value:
+				question.show = 1
+			else:
+				question.show = 0
+			question.save(update_fields=['show'])
+
+
+	return HttpResponseRedirect('/feedbackManager/')
+
+
+
 
 
 

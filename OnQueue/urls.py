@@ -46,7 +46,10 @@ urlpatterns = patterns('',
     url(r'^core/$', 'clients.views.core_function'),
     url(r'^dev/$', 'clients.views.dev'),
     url(r'^feedback/$', 'clients.views.feedback_service'),
-
+    url(r'^feedbackManager/$', 'clients.views.feedbackManager'),
+    url(r'^change_rating_texts/$', 'clients.views.change_rating_texts'),
+    url(r'^create_questions/$', 'clients.views.create_questions'),
+    url(r'^questions_to_show/$', 'clients.views.questions_to_show'),
     
 
 
