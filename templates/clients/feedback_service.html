@@ -407,6 +407,9 @@ border-color: #ebebeb;">
         if (localStorage.length) {
             console.log("Am sending");
             for (var key in localStorage){
+                if (key=='showIcon' || key=='urlBlackList'){
+                    continue;
+                }
                var data = localStorage[key];
                console.log(key+":"+data);
                 $.ajax({
@@ -425,36 +428,115 @@ border-color: #ebebeb;">
 
   </script>
   <script type="text/javascript">
+
+
+
+
     var frm = $('#feedform');
     frm.submit(function (ev) {
         console.log("Submitting");
         var data = frm.serialize();
-        console.log(typeof(data));
-        if (navigator.onLine == false) {
-            console.log("OFFline");
-            localStorage[localStorage.length+1] = data;
-            bootbox.alert("Thank you! for your feedback", function() {
-                document.getElementById("feedform").reset();
-                // location.reload('/feedback/');
-            });
 
-        } else {
-            $.ajax({
-                type: frm.attr('method'),
-                url: frm.attr('action'),
-                data: frm.serialize(),
-                success: function (data) {
-                    bootbox.alert("Thank you! for your feedback", function() {
-                        document.getElementById("feedform").reset();
-                      // location.reload('/feedback/');
-                    });
-                    
-                }
-            });
+        var test = function isOnline(){
+
+            var xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHttp');
+            xhr.onload = function(){
+                console.log("REACHABLE");
+                $.ajax({
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: frm.serialize(),
+                    success: function (data) {
+                        bootbox.alert("Thank you! for your feedback", function() {
+                            document.getElementById("feedform").reset();
+                          // location.reload('/feedback/');
+                        });
+                        
+                    }
+                });
+            }
+            xhr.onerror = function(){
+                console.log("not REACHABLE");
+                console.log("OFFline");
+                localStorage[localStorage.length+1] = data;
+                bootbox.alert("Thank you! for your feedback", function() {
+                    document.getElementById("feedform").reset();
+                    // location.reload('/feedback/');
+                });
+            }
+            xhr.open("GET","/",true);
+            xhr.send();
+
         }
+
+        console.log(typeof(data));
+        test();
+        // if (navigator.onLine == false) {
+        //     console.log("OFFline");
+        //     localStorage[localStorage.length+1] = data;
+        //     bootbox.alert("Thank you! for your feedback", function() {
+        //         document.getElementById("feedform").reset();
+        //         // location.reload('/feedback/');
+        //     });
+
+        // } else {
+        //     $.ajax({
+        //         type: frm.attr('method'),
+        //         url: frm.attr('action'),
+        //         data: frm.serialize(),
+        //         success: function (data) {
+        //             bootbox.alert("Thank you! for your feedback", function() {
+        //                 document.getElementById("feedform").reset();
+        //               // location.reload('/feedback/');
+        //             });
+                    
+        //         }
+        //     });
+        // }
 
         ev.preventDefault();
     });
+
+//     var test = function isOnline(){
+
+//             var xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHttp');
+//             xhr.onload = function(){
+//                 console.log("REACHABLE");
+//                 $.ajax({
+//                     type: frm.attr('method'),
+//                     url: frm.attr('action'),
+//                     data: frm.serialize(),
+//                     success: function (data) {
+//                         bootbox.alert("Thank you! for your feedback", function() {
+//                             document.getElementById("feedform").reset();
+//                           // location.reload('/feedback/');
+//                         });
+                        
+//                     }
+//                 });
+//             }
+//             xhr.onerror = function(){
+//                 console.log("not REACHABLE");
+//                 console.log("OFFline");
+//                 localStorage[localStorage.length+1] = data;
+//                 bootbox.alert("Thank you! for your feedback", function() {
+//                     document.getElementById("feedform").reset();
+//                     // location.reload('/feedback/');
+//                 });
+//             }
+//             xhr.open("GET","/",true);
+//             xhr.send();
+
+// }
+
+// isOnline(
+//     function(){
+//         alert("Sorry, we currently do not have Internet access.");
+//     },
+//     function(){
+//         alert("Succesfully connected!");
+//     }
+// );
 </script>
 </body>
 </html>
